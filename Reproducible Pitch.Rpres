@@ -1,0 +1,60 @@
+City of Sacramento Budget Data App
+========================================================
+author: Jordan Miller-Ziegler
+date:  July 16, 2018
+autosize: true
+
+Overview
+========================================================
+
+- This project provides an interactive way to explore how much the City of Sacramento budgeted for various items from FY15 to FY18.
+
+- The data are from the City of Sacramento's open data portal, data.cityofsacramento.org.
+
+- The file itself can be downloaded here: https://opendata.arcgis.com/datasets/00aa04d56178482b8b33248d32a2cd12_0.csv
+
+- As can be seen on the next slide, the data represent various categories of items in the Sacramento budget, and the budgeted amount.
+
+Data
+========================================================
+```{r}
+sacbudget <- read.csv("sacbudget.csv")
+levels(sacbudget$FUND_SUMMARY)[1:2] <- c("CIRBS","Gas Tax")
+str(sacbudget[,c(4,8,16,22,23,26)])
+```
+
+Data by Object Class
+========================================================
+For example, here are the various "object classes" and their budget amounts:
+
+```{r echo = FALSE}
+library(ggplot2)
+ggplot(sacbudget, aes(x = OJBECT_CLASS, y = BUDGET_AMOUNT, fill = OJBECT_CLASS)) + 
+  geom_col() +
+  xlab("Object Class") +
+  ylab("Budget Amount") + 
+  theme(legend.title = element_blank(), axis.text.x = element_blank()) +
+  ggtitle("Budget Amounts by Object Class")
+```
+
+App Usage
+========================================================
+
+- The user selects which category they would like to explore via one of the drop-down menus.
+
+- For example, the user might explore the Account Category "Employee Benefits" to see how much was budgeted for employee benefit programs.
+
+- The app will display the total spent, this amount as a percentage of the total budget, and the amount budgeted for each of the four fiscal years FY15 - FY18.
+
+A word of caution: Being overly selective
+========================================================
+
+- The app can display any possible combination of the four input options. 
+
+- This includes many combinations which do not occur in the budget. 
+
+- For example, there are no account summaries of "Donations" for the "City Attorney" operating unit. 
+
+- In this case, the app will display blank graphical output. 
+
+- If this occurs, the user may simply broaden the search by setting one or more categories to "All".
